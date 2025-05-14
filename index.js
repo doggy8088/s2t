@@ -93,12 +93,65 @@ async function main() {
                           `const rsChars = "${escapeString(rsChars)}";\n` +
                           `// 繁體字中的罕見字\n` +
                           `const rtChars = "${escapeString(rtChars)}";\n\n` +
-                          `// Example usage (optional):\n` +
-                          `// console.log("Simplified Characters Count:", sChars.length);\n` +
-                          `// console.log("Traditional Characters Sequence Length:", tChars.length);\n` +
-                          `// console.log("Simplified characters (where traditional has space) Count:", mChars.length);\n\n` +
-                          `// To use these in another Node.js module:\n` +
-                          `// module.exports = { sChars, tChars, mChars };\n`;
+                          `
+/**
+ * 檢查 text 是否包含任何 mChars 字元
+ * @param {*} text
+ * @returns {Boolean}
+ */
+function isContainsMultipleChars(text) {
+    return [...text].some(char => mChars.includes(char));
+}
+
+/**
+ * 檢查 text 是否包含任何 mChars 字元
+ * @param {*} text
+ * @returns {Boolean}
+ */
+function isContainsSimplifiedChinese(text) {
+    return [...text].some(char => sChars.includes(char) || mChars.includes(char));
+}
+
+/**
+ * 將文字轉換為繁體中文
+ * 此函數依賴於已在外部定義的 sChars 和 tChars 變數。
+ * @param {String} text 輸入文字
+ * @returns {String} 轉換後的繁體中文文字
+ */
+function convertToTraditionalChinese(text) {
+    if (!text || typeof text !== 'string') {
+        return text; // Return original if not a string or empty
+    }
+
+    // 檢查 sChars 和 tChars 是否已定義且長度相同
+    // 這些變數應由使用者在腳本的全域範圍或此函數可訪問的範圍內定義
+    if (typeof sChars === 'undefined' || typeof tChars === 'undefined') {
+        const errorMsg = '[convertToTraditionalChinese] 全域變數 sChars 或 tChars 未定義，無法進行轉換。請在腳本中定義它們。';
+        console.warn(errorMsg);
+        // 若 DEBUG 模式開啟，也將此警告寫入試算表日誌
+        if (DEBUG) writeLogToSheet(errorMsg);
+        return text; // 返回原始文本，不進行轉換
+    }
+    if (sChars.length !== tChars.length) {
+        const errorMsg = \`[convertToTraditionalChinese] 全域變數 sChars (長度 \${sChars.length}) 與 tChars (長度 \${tChars.length}) 長度不同，無法進行轉換。\`;
+        console.warn(errorMsg);
+        if (DEBUG) writeLogToSheet(errorMsg);
+        return text; // 返回原始文本
+    }
+
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const index = sChars.indexOf(char);
+        if (index !== -1) {
+            result += tChars[index];
+        } else {
+            result += char; // Keep original character if not found in the map
+        }
+    }
+    return result;
+}
+`;
 
         console.log(`Writing output to ${outputFilePath}...`);
         fs.writeFileSync(outputFilePath, jsContent, 'utf8');
