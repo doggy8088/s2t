@@ -15,7 +15,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "node test.js",
-    "publish": "npm publish --access public"
+    "do-publish": "npm publish --access public"
   },
   "keywords": [
     "s2t",
