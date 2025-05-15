@@ -1,13 +1,29 @@
 {
-  "name": "s2t-characters",
-  "version": "1.0.0",
+  "name": "@willh/s2t",
+  "version": "0.1.0",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doggy8088/s2t.git"
+  },
+  "bugs": {
+    "url": "https://github.com/doggy8088/s2t/issues"
+  },
+  "engines": {
+    "node": ">= 18.0.0"
+  },
   "scripts": {
     "start": "node index.js",
     "test": "node test.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "s2t",
+    "簡繁轉換"
+  ],
+  "author": "Will 保哥",
   "license": "MIT",
-  "description": ""
+  "description": "簡體轉繁體 CLI 工具",
+  "bin": {
+    "s2t": "bin/s2t.js"
+  }
 }
