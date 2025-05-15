@@ -151,6 +151,12 @@ function convertToTraditionalChinese(text) {
     }
     return result;
 }
+
+module.exports = {
+    isContainsMultipleChars,
+    isContainsSimplifiedChinese,
+    convertToTraditionalChinese
+};
 `;
 
         console.log(`Writing output to ${outputFilePath}...`);
